@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux'
 import { addItem } from '../slices/demandSlice'
 import { Button, Dialog, Portal} from 'react-native-paper'
+import ModalSelect from '../components/ModalSelect'
 
 import { M_COLOR, C_COLOR1, C_COLOR2, D_COLOR1, D_COLOR2, C_TEXT_COLOR, D_TEXT_COLOR, URL_API } from '../../global';
 
@@ -20,6 +21,7 @@ export default function SelectedProduct ({navigation, route }) {
     const [ quantity, setQuantity ] = useState("0")
     const [ subtotal, setSubtotal ] = useState(0)
     const [ visible, setVisible ] = useState(false)
+    const [ extras, setExtras ] = useState([])
 
     function HideDialog() {
         setVisible(false)
@@ -83,9 +85,33 @@ export default function SelectedProduct ({navigation, route }) {
                 value: product.value,
                 fixPromotionDay: product.fixPromotionDay,
                 promotionValue: product.promotionValue,
-                quantity: quantity
+                quantity: quantity,
+                extra: extras
             }))
         }
+        console.log(demandItens)
+    }
+
+    function ModalToSelected (array) {
+        setExtras(array)
+        setVisible(false)
+    }
+
+    function AdditionalMessage() {
+        let message = "Adicionais:\n"
+        for (const adicional of extras) {
+            let subMessage = `-> 1 x adicional de - `
+            let item = ""
+            for (const adicionalItem of adicional.add) {
+                item += `${adicionalItem} - `
+            }
+            subMessage += `${item}\n`
+            message += `${subMessage}`
+        }
+        if (message === "Adicionais:\n") {
+            message += "Não foram acrescentados adicionais"
+        }
+        return message
     }
 
     function Return() {
@@ -147,12 +173,27 @@ export default function SelectedProduct ({navigation, route }) {
                     />
                 </TouchableOpacity>
             </View>
+            {
+                product.subType === 'esfiha' || product.subType === 'esfiha massa intg'
+                ?
+                <ModalSelect produto={'adicional es'} qtt={quantity} modalToSelected={ModalToSelected} txt="Deseja acrescentar adicionais?" />
+                :
+                    product.subType === 'esfiha doce'
+                    ?
+                    <ModalSelect produto={'adicional ed'} qtt={quantity} modalToSelected={ModalToSelected} txt="Deseja acrescentar adicionais?" />
+                    :
+                        product.subType === 'pastel doce'
+                        ?
+                        <ModalSelect produto={'adicional pd'} qtt={quantity} modalToSelected={ModalToSelected} txt="Deseja acrescentar adicionais?" />
+                        :
+                        <></>
+            }
             <View>
                 <Portal>
                     <Dialog visible={visible} onDismiss={HideDialog}>
                         <Dialog.Title>Sucesso!</Dialog.Title>
                         <Dialog.Content>
-                            <Text>{`Adicionado ao pedido:\n ${quantity} x ${product.subType}(s) - ${product.specification}`}</Text>
+                            <Text>{`Adicionado ao pedido:\n ${quantity} x ${product.subType}(s) - ${product.specification}\n\n${AdditionalMessage()}`}</Text>
                         </Dialog.Content>
                         <Dialog.Actions>
                             <Button onPress={() => navigation.navigate("Escolher")}>Continuar Escolhendo</Button>

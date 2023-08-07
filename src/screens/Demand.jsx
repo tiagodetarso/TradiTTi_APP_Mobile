@@ -94,7 +94,12 @@ export default function Demand() {
             totalArray.push(item.promotionValue * item.quantity)
             :
             totalArray.push(item.value * item.quantity)
+
+            for (add of item.extra) {
+                totalArray.push(add.value)
+            }
         }
+
 
         const discount = QtEsfihaSalgada(pedido)
         if (discount !== 0) {
@@ -120,13 +125,73 @@ export default function Demand() {
     function ItensPedido(order) {
         var itensPedido = ""
         for (let i = 1; i < order.length; i++) {
+            var adicional = ""
+            for (objeto of order[i].extra) {
+                let conteudo = ""
+                for (let j = 0; j < objeto.add.length; j++) {
+                    conteudo === "" ? conteudo += `${objeto.add[j]} ` : conteudo += `e ${objeto.add[j]}`
+                }
+                adicional += `- 1 x ADD de ${conteudo} (R$ ${objeto.value.toFixed(2).replace(".",",")})]\n`
+            }
             if (order[i].fixPromotionDay === agora.getDay()){
-                itensPedido += `${order[i].quantity} x ${order[i].subType} - ${order[i].specification} -> R$ ${(order[i].quantity * order[i].promotionValue).toFixed(2).replace('.',",")}\n`
+                itensPedido += `>> ${order[i].quantity} x ${order[i].subType} - ${order[i].specification} -> R$ ${(order[i].quantity * order[i].promotionValue).toFixed(2).replace('.',",")}\n${adicional}\n`
             } else {
-                itensPedido += `${order[i].quantity} x ${order[i].subType} - ${order[i].specification} -> R$ ${(order[i].quantity * order[i].value).toFixed(2).replace('.',',')}\n`
+                itensPedido += `>> ${order[i].quantity} x ${order[i].subType} - ${order[i].specification} -> R$ ${(order[i].quantity * order[i].value).toFixed(2).replace('.',',')}\n${adicional}\n`
             }
         }
         return itensPedido
+    }
+
+    function Adicional01 (obj) {
+        const extra = obj.extra
+        let adicional = ""
+        if (extra === []) {
+            adicional += ""
+        } else {
+            for (item of extra) {
+                adicional += `(1 x R$ ${item.value.toFixed(2).replace(".",",")})\n`
+            }
+        }
+        return adicional
+    }
+
+    function Adicional02 (obj) {
+        const extra = obj.extra
+        let adicional = ""
+        if (extra === []) {
+            adicional += ""
+        } else {
+            for (item of extra) {
+                const add = item.add
+                let ingrediente = ""
+                for (ingr of item.add) {
+                    ingrediente === ""
+                    ?
+                    ingrediente += ingr
+                    :
+                    ingrediente += ` e ${ingr}`
+                }
+                adicional += `1 add: ${ingrediente}\n`
+            }
+        }
+        return adicional
+    }
+
+    function Adicional03 (obj) {
+        const extra = obj.extra
+        let adicional = 0
+        let valor = 0
+        for (item of extra) {
+            const value = item.value
+            valor += value
+        }
+        adicional += valor
+
+        if (adicional === 0) {
+            return ""
+        } else {
+            return `R$ ${adicional.toFixed(2).replace(".",",")}\n`
+        }
     }
 
     function IsOpen(numberClient) {
@@ -335,7 +400,7 @@ export default function Demand() {
                 <Text style={styles.divider}>-------------------------------------------------------</Text>
                 <Text style={styles.txtEstab}>Itens do Pedido:</Text>
                 <View style={styles.rowView}>
-                    <Text style={styles.txt5}>  </Text>
+                    <Text style={styles.txt5}>id</Text>
                     <Text style={styles.txt45}>produto</Text>
                     <Text style={styles.txt25}>Qtd. x v. un.</Text>
                     <Text style={styles.txt20}>Subtotal</Text>
@@ -347,24 +412,24 @@ export default function Demand() {
                     <Text>Nenhum produto foi selecionado ainda.</Text>
                     : 
                         pedido.map((element, index) => {
-                            if(index>0) {
+                            if (index>0) {
                                 return (
                                     <View style={styles.rowView} key={element.id+index}>
                                         <Text style={styles.txt5}>{`${index}: `}</Text>
-                                        <Text style={styles.txt45}>{`${element.subType} - ${element.specification}`}</Text>
+                                        <Text style={styles.txt45}>{`${element.subType} - ${element.specification}\n${Adicional02(element)}`}</Text>
                                         <Text style={styles.txt25}>{
                                             element.fixPromotionDay === agora.getDay()
                                             ?
-                                            `${element.quantity} x R$ ${element.promotionValue.toFixed(2).replace(".",",")}`
+                                            `${element.quantity} x R$ ${element.promotionValue.toFixed(2).replace(".",",")}\n${Adicional01(element)}`
                                             :
-                                            `${element.quantity} x R$ ${element.value.toFixed(2).replace(".",",")}`
+                                            `${element.quantity} x R$ ${element.value.toFixed(2).replace(".",",")}\n${Adicional01(element)}`
                                         }</Text>
                                         <Text style={styles.txt20}>{
                                             element.fixPromotionDay === agora.getDay()
                                             ?
-                                            `R$ ${(element.quantity * element.promotionValue).toFixed(2).replace(".",",")}`
+                                            `R$ ${(element.quantity * element.promotionValue).toFixed(2).replace(".",",")}\n${Adicional03(element)}`
                                             :
-                                            `R$ ${(element.quantity * element.value).toFixed(2).replace(".",",")}`
+                                            `R$ ${(element.quantity * element.value).toFixed(2).replace(".",",")}\n${Adicional03(element)}`
                                         }</Text>
                                         <TouchableOpacity
                                             style={{alignItems:'center'}}
