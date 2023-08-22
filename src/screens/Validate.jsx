@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, TextInput, TouchableHighlight, Image, Alert, StyleSheet} from 'react-native'
+import { SafeAreaView, View, Text, TextInput, TouchableHighlight, Image, Alert, StyleSheet, Dimensions} from 'react-native'
 
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -9,6 +9,8 @@ import { useNavigation } from '@react-navigation/native'
 
 import { C_COLOR2, D_COLOR1, D_COLOR2, C_TEXT_COLOR, URL_API, CLIENT_NUMBER } from '../../global'
 
+const validateWidth = Dimensions.get('screen').width
+const validateHeight = Dimensions.get('screen').height
 
 export default function Validate() {
 
@@ -91,14 +93,14 @@ export default function Validate() {
       backgroundColor: D_COLOR2,
       alignItems: 'center',
       justifyContent: 'center',
-      width: '100%',
-      padding: 10,
+      width: validateWidth,
+      padding: validateWidth/45,
     },
     corpo: {
       flex:1,
       alignItems: 'center',
       justifyContent: 'flex-start',
-      padding:5,
+      padding:validateWidth/90,
     },
     txtCampos: {
       flex:1,
@@ -107,36 +109,36 @@ export default function Validate() {
     txtSubmeter: {
       backgroundColor: D_COLOR1,
       color: C_COLOR2,
-      fontSize: 20,
+      fontSize: validateWidth/20,
       fontWeight: 'bold'
     },
     txtbx: {
       flex:2,
       backgroundColor: 'white',
-      borderRadius: 10,
-      padding:10,
+      borderRadius: validateWidth/45,
+      padding:validateWidth/45,
     },
     txtTitulo: {
-        paddingTop: 30,
+        paddingTop: validateHeight/10,
         color: C_TEXT_COLOR,
-        fontSize: 20,
+        fontSize: validateWidth/20,
         textAlign: 'center',
     },
     code: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: 10,
+      padding: validateWidth/45,
     },
     submeter: {
-      padding:10,
+      padding:validateWidth/45,
       alignSelf:'flex-end'
     },
     botaoSubmeter: {
       backgroundColor: D_COLOR1,
-      borderRadius: 10,
-      padding: 10,
-      width: 250,
+      borderRadius: validateWidth/45,
+      padding: validateWidth/45,
+      width: validateWidth/1.65,
       alignItems: 'center',
     },
   });

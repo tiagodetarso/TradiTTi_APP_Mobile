@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, Text, View, Image, TextInput, TouchableHighlight, Alert, StyleSheet } from 'react-native'
+import { SafeAreaView, ScrollView, Text, View, Image, TextInput, TouchableHighlight, Alert, StyleSheet, Dimensions } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { setEmail, setSenha, cleanSenha } from '../slices/loginSlice'
 import { setCustomer } from '../slices/customerSlice'
@@ -7,7 +7,8 @@ import { useNavigation } from '@react-navigation/native'
 
 import { M_COLOR, C_COLOR1, C_COLOR2, C_TEXT_COLOR, URL_API, CLIENT_NUMBER } from '../../global';
 
-import Social from '../components/Social';
+const entryWidth = Dimensions.get('screen').width
+const entryHeight = Dimensions.get('screen').height
 
 export default function Entry() {
 
@@ -44,6 +45,27 @@ export default function Entry() {
           Alert.alert(data.msg)
         })
         .catch((err) => console.log(err))
+    }
+
+    function LogarAnonimo() {
+      dispatch(setCustomer({
+        id: "4n0n1m0",
+        adress: {
+          id: "4n0n1m0",
+          city: "Astorga",
+          complement: "",
+          neighborhood: "",
+          number: 0,
+          postalCode: "",
+          reference: "",
+          state: "PR",
+          street: ""
+        },
+        email: "",
+        name: "Cliente Estimado",
+        phoneWP: ""
+      }))
+      navigation.navigate("Boston Esfiharia")
     }
 
     return(
@@ -101,7 +123,18 @@ export default function Entry() {
                 style={styles.botaoCadastro}
                 onPress={()=>navigation.navigate("Cadastre-se")}
               >
-                <Text style = {styles.txtCadastro}>Ainda não sou cadastrado?</Text>
+                <Text style = {styles.txtCadastro}>Cadastre-se</Text>
+              </TouchableHighlight>
+            </View>
+            <View style={styles.cadastro}>
+              <Text style={styles.txtOu}>ou</Text>
+            </View>
+            <View style={styles.entrar}>
+              <TouchableHighlight
+                style={styles.botaoEntra}
+                onPress={()=>LogarAnonimo()}
+              >
+                <Text style = {styles.txtEntra}>Entre sem cadastro</Text>
               </TouchableHighlight>
             </View>
           </View>
@@ -115,8 +148,8 @@ export default function Entry() {
       flex:1,
       backgroundColor: M_COLOR,
       alignItems: 'center',
-      width: '100%',
-      padding: 5,
+      width: entryWidth,
+      padding: entryWidth/90,
     },
     imageView: {
       flexDirection: 'row',
@@ -125,82 +158,88 @@ export default function Entry() {
     },
     image: {
       resizeMode: 'contain',
-      width: 300,
-      height: 200,
+      width: entryWidth/1.5,
+      height: entryHeight/4.5,
     },
     corpo: {
       alignItems: 'center',
       justifyContent: 'flex-start',
-      padding:5,
+      padding:entryWidth/90,
     },
     txtCampos: {
       flex:1,
       color: C_TEXT_COLOR
     },
     txtRecup: {
-      fontSize: 17,
+      fontSize: entryWidth/22,
       color: C_TEXT_COLOR,
       fontWeight: 'bold'
     },
     txtEntra: {
       backgroundColor: C_COLOR1,
-      fontSize: 20,
+      fontSize: entryWidth/20,
       fontWeight: 'bold'
     },
     txtbx: {
       flex:2,
       backgroundColor: 'white',
-      borderRadius: 10,
-      padding:10,
+      borderRadius: entryWidth/40,
+      padding:entryWidth/45,
     },
     txttitulo: {
-        marginTop: 30,
+        marginTop: entryWidth/15,
         color: C_TEXT_COLOR,
-        fontSize: 20,
+        fontSize: entryWidth/20,
         fontWeight: 'bold'
     },
     txtCadastro: {
         color: C_COLOR2,
-        fontSize: 20,
-        paddingBottom: 40,
+        fontSize: entryWidth/20,
         fontWeight: 'bold'
     },
+    txtOu: {
+      color: C_COLOR1,
+      fontSize: entryWidth/22,
+      marginLeft: entryWidth/4.25,
+      fontWeight: 'bold'
+  },
     email: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: 5,
+      padding: entryWidth/90,
     },
     senha: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      padding:5,
+      padding:entryWidth/90,
     },
     reSenha: {
       alignItems: 'center',
       justifyContent: 'center',
-      padding:10,
+      padding:entryWidth/45,
     },
     cadastro: {
       alignItems: 'center',
       justifyContent: 'center',
-      paddingTop:50,
+      paddingVertical:entryHeight/60,
     },
     entrar: {
-      padding:10,
+      padding:entryWidth/45,
       alignSelf:'flex-end'
     },
     botaoEntra: {
       backgroundColor: C_COLOR1,
-      borderRadius: 10,
-      padding: 10,
-      width: 250,
+      borderRadius: entryWidth/45,
+      padding: entryWidth/45,
+      width: entryWidth/1.75,
       alignItems: 'center',
     },
     botaoRecup: {
-      marginLeft: 100
+      marginLeft: entryWidth/2.55
     },
     botaoCadastro: {
-      },
+      marginLeft: entryWidth/4.25
+    },
   });

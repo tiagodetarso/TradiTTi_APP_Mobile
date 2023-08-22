@@ -3,7 +3,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider } from 'react-redux'
-import { useSelector } from 'react-redux'
 import store from './src/store/index'
 
 import Opening from './src/screens/Opening'

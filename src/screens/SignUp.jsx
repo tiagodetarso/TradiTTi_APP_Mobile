@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Image, Text, TextInput, ScrollView, TouchableHighlight, Alert, StyleSheet } from 'react-native'
+import { SafeAreaView, View, Image, Text, TextInput, ScrollView, TouchableHighlight, Alert, StyleSheet, Dimensions } from 'react-native'
 import { TextInputMask } from 'react-native-masked-text'
 import SelectDropdown from 'react-native-select-dropdown'
 import { useSelector, useDispatch } from 'react-redux'
@@ -22,7 +22,10 @@ import {
     setPassword,
     setConfirmPassword } from '../slices/signupSlice'
 
-import { C_COLOR1, C_COLOR2, D_COLOR1, C_TEXT_COLOR, URL_API, CLIENT_NUMBER, NEIGHBORHOOD } from '../../global';
+import { C_COLOR1, D_COLOR1, C_TEXT_COLOR, URL_API, CLIENT_NUMBER, NEIGHBORHOOD } from '../../global';
+
+const signupWidth = Dimensions.get('screen').width
+const signupHeight = Dimensions.get('screen').height
 
 export default function SignUp() {
 
@@ -43,8 +46,6 @@ export default function SignUp() {
     const postalCode = useSelector((state) => state.signup.postalCode)
     const password = useSelector((state) => state.signup.password)
     const confirmPassword = useSelector((state) => state.signup.confirmPassword)
-
-
 
     const dispatch = useDispatch()
 
@@ -335,13 +336,13 @@ const styles = StyleSheet.create({
         backgroundColor: C_COLOR1,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
-        padding: 10,
+        width: signupWidth,
+        padding: signupWidth/45,
     },
     corpo: {
         flex:1,
-        width: '100%',
-        padding:5,
+        width: signupWidth,
+        padding:signupWidth/90,
     },
     txtCampos: {
         flex:1,
@@ -349,49 +350,49 @@ const styles = StyleSheet.create({
     txtbx: {
         flex:2,
         backgroundColor: 'white',
-        borderRadius: 10,
-        padding:10,
+        borderRadius: signupWidth/30,
+        padding:signupWidth/45,
     },
     rowTxtBox: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 10,
+        padding: signupWidth/45,
     },
     subTitle: {
-        paddingTop: 20,
+        paddingTop: signupWidth/20,
         fontWeight: 'bold',
     },
     txtBotao: {
         backgroundColor: D_COLOR1,
-        fontSize: 20,
+        fontSize: signupWidth/20,
         fontWeight: 'bold',
         color: C_TEXT_COLOR,
     },
     cadastrar: {
-        padding:10,
+        padding:signupWidth/45,
         alignSelf:'center'
     },
     botao: {
         backgroundColor: D_COLOR1,
-        borderRadius: 10,
-        padding: 10,
-        width: 300,
+        borderRadius: signupWidth/30,
+        padding: signupWidth/45,
+        width: signupWidth/1.5,
         alignItems: 'center',
     },
     dropdownButton: {
         flex:2,
         backgroundColor: 'white',
-        borderRadius: 10,
-        padding:3,
-        height: 30,
+        borderRadius: signupWidth/45,
+        padding:signupWidth/150,
+        height: signupHeight/25,
     },
     dropdown: {
         flex:2,
         backgroundColor: 'white',
-        borderRadius: 10,
-        padding:10,
-        width: 255,
+        borderRadius:signupWidth/45,
+        padding:signupWidth/45,
+        width: signupWidth/1.7,
         justifyContent: 'center'
     },
 })

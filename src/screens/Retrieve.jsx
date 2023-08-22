@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, TextInput, TouchableHighlight, Image, StyleSheet, Alert } from 'react-native'
+import { SafeAreaView, View, Text, TextInput, TouchableHighlight, Image, StyleSheet, Alert, Dimensions } from 'react-native'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { setEmail } from '../slices/loginSlice'
@@ -7,6 +7,8 @@ import { setEmail } from '../slices/loginSlice'
 import { useNavigation } from '@react-navigation/native'
 
 import { C_COLOR1, D_COLOR1, C_TEXT_COLOR, URL_API, CLIENT_NUMBER } from '../../global'
+
+const retrieveWidth = Dimensions.get('screen').width
 
 export default function Retrieve() {
 
@@ -84,26 +86,26 @@ const styles = StyleSheet.create({
         backgroundColor: C_COLOR1,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
-        padding: 10,
+        width: retrieveWidth,
+        padding: retrieveWidth/45,
       },
       corpo: {
         flex:1,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        padding:5,
+        padding:retrieveWidth/90,
       },
       email: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 10,
+        padding: retrieveWidth/45,
       },
       txtbx: {
         flex:2,
         backgroundColor: 'white',
-        borderRadius: 10,
-        padding:10,
+        borderRadius: retrieveWidth/30,
+        padding:retrieveWidth/45,
       },
       txtCampos: {
         flex:1,
@@ -111,18 +113,18 @@ const styles = StyleSheet.create({
       txtEnviar: {
         backgroundColor: D_COLOR1,
         color: C_TEXT_COLOR,
-        fontSize: 20,
+        fontSize: retrieveWidth/22,
         fontWeight: 'bold'
       },
       enviar: {
-        padding:10,
+        padding:retrieveWidth/45,
         alignSelf:'flex-end'
       },
       botaoEnviar: {
         backgroundColor: D_COLOR1,
-        borderRadius: 10,
-        padding: 10,
-        width: 250,
+        borderRadius: retrieveWidth/30,
+        padding: retrieveWidth/45,
+        width: retrieveWidth/1.65,
         alignItems: 'center',
       },
 })

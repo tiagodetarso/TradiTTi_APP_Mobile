@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef}  from 'react'
+import React from 'react'
 import { View, Text, StyleSheet, FlatList, Image, Dimensions } from 'react-native'
-import Animated, { Layout, FadeInLeft, FadeOutRight } from 'react-native-reanimated'
 
-import { M_COLOR, C_COLOR1, C_COLOR2, D_COLOR1, D_COLOR2, C_TEXT_COLOR, D_TEXT_COLOR } from '../../global';
+import { M_COLOR, C_TEXT_COLOR } from '../../global';
 
 import todoDia from '../../assets/todoDiaBoston.jpg'
 import esfihaDoce from '../../assets/esfihaChocoBoston.jpg'
@@ -11,8 +10,6 @@ import alcatra from '../../assets/alcatraBoston.jpg'
 import pastel from '../../assets/pastelBoston.jpg'
 import frente from '../../assets/bostonFrente.jpg'
 import esfihas from '../../assets/maisEsfihasBoston.png'
-
-
 
 const carouselWidth = Dimensions.get('screen').width
 

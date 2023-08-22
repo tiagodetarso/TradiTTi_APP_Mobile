@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, ScrollView, Image, Text, StyleSheet, TouchableHighlight, FlatList } from 'react-native';
+import { SafeAreaView, View, ScrollView, Image, Text, StyleSheet, TouchableHighlight, FlatList, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import Carousel from '../components/Carousel'
 
-import { C_COLOR1, M_COLOR, D_COLOR2, D_TEXT_COLOR, C_TEXT_COLOR, URL_API, CLIENT_NUMBER } from '../../global';
+import { C_COLOR1, C_COLOR2, M_COLOR, D_TEXT_COLOR, C_TEXT_COLOR, URL_API, CLIENT_NUMBER } from '../../global';
 
 import Social from '../components/Social';
+
+const openingWidth = Dimensions.get('screen').width
+const openingHeight = Dimensions.get('screen').height
 
 export default function Opegning() {
 
@@ -83,7 +86,7 @@ export default function Opegning() {
                     </TouchableHighlight>
                 </View>
                 <Text style={styles.txtCorpo}>Contate-nos</Text>
-                <Social />
+                <Social color={C_COLOR2} txtColor={C_TEXT_COLOR}/>
             </ScrollView>
         </SafeAreaView>
     )
@@ -95,75 +98,73 @@ const styles = StyleSheet.create({
         backgroundColor: M_COLOR,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
+        width: openingWidth,
     },
     corpo: {
-        width: '100%',
+        width: openingWidth,
       },
     image: {
         resizeMode: 'contain',
-        width: 300,
-        height: 180,
+        width: openingWidth/1.5,
+        height: openingHeight/5,
         alignSelf: 'center',
-        borderRadius:20
+        borderRadius:openingWidth/90
     },
     txtMsg: {
-        marginBottom: 10,
-        fontSize: 20,
+        marginBottom: openingHeight/150,
+        fontSize: openingWidth/20,
         color: D_TEXT_COLOR,
         fontWeight: 'bold',
         alignSelf: 'center'
     },
     txtCorpo: {
-        padding: 5,
-        marginTop: 10,
-        fontSize: 20,
+        padding: openingWidth/90,
+        marginTop: openingWidth/45,
+        fontSize: openingWidth/20,
         color: D_TEXT_COLOR,
         fontWeight: 'bold',
         alignSelf: 'center',
     },
     txtSub: {
-        fontSize: 20,
+        fontSize: openingWidth/20,
         color: C_TEXT_COLOR,
         fontWeight: 'bold',
         alignSelf: 'center'
     },
     txtEsf: {
-        fontSize: 18,
+        fontSize: openingWidth/22,
         color: D_TEXT_COLOR,
         alignSelf: 'center',
         fontWeight: 'bold'
     },
     spam: {
-        fontSize: 15,
+        fontSize: openingWidth/30,
         color: D_TEXT_COLOR,
         alignSelf: 'center'
     },
     vwSub: {
-        width: '100%',
+        width: openingWidth,
     },
     vwAcess: {
-        marginTop:15,
-        padding:10,
+        marginTop:openingWidth/30,
+        padding:openingWidth/45,
         alignSelf:'center'
     },
     btnAcess: {
         backgroundColor: C_COLOR1,
-        borderRadius: 10,
-        padding: 5,
-        width: 300,
-        height: 40,
+        borderRadius: openingWidth/45,
+        padding: openingWidth/90,
+        width: openingWidth/1.5,
+        height: openingHeight/20,
         alignItems: 'center',
     },
     txtAcess: {
         backgroundColor: C_COLOR1,
-        fontSize: 20,
+        fontSize: openingWidth/20,
         fontWeight: 'bold'
     },
     carousel: {
-        maxHeight: 300
+        maxHeight: openingHeight/3
 
     }
 })
-
-//<ScrollView style={styles.corpo}>

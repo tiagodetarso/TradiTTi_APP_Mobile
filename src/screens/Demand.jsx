@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Alert, TextInput, TouchableHighlight, ScrollView, Linking } from 'react-native'
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, Alert, TextInput, TouchableHighlight, ScrollView, Linking, Dimensions } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import SelectDropdown from 'react-native-select-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -9,6 +9,9 @@ import Header from '../components/Header'
 import { excludeItem, popItens } from '../slices/demandSlice'
 
 import { C_COLOR1, C_COLOR2, C_TEXT_COLOR, D_TEXT_COLOR, URL_API, CLIENT_NUMBER, NEIGHBORHOOD } from '../../global';
+
+const demandWidth = Dimensions.get('screen').width
+const demandHeight = Dimensions.get('screen').height
 
 export default function Demand() {
 
@@ -124,19 +127,29 @@ export default function Demand() {
 
     function ItensPedido(order) {
         var itensPedido = ""
+
         for (let i = 1; i < order.length; i++) {
             var adicional = ""
+            var comb = ""
+
             for (objeto of order[i].extra) {
                 let conteudo = ""
                 for (let j = 0; j < objeto.add.length; j++) {
                     conteudo === "" ? conteudo += `${objeto.add[j]} ` : conteudo += `e ${objeto.add[j]}`
                 }
-                adicional += `- 1 x ADD de ${conteudo} (R$ ${objeto.value.toFixed(2).replace(".",",")})]\n`
+                adicional += ` 1 x ADD de ${conteudo} (R$ ${objeto.value.toFixed(2).replace(".",",")})\n`
             }
+
+            let combinado = ""
+            for (objeto of order[i].combo) {
+                combinado += `${objeto.quantity} x ${objeto.specification}\n`
+            }
+            comb += combinado
+
             if (order[i].fixPromotionDay === agora.getDay()){
-                itensPedido += `>> ${order[i].quantity} x ${order[i].subType} - ${order[i].specification} -> R$ ${(order[i].quantity * order[i].promotionValue).toFixed(2).replace('.',",")}\n${adicional}\n`
+                itensPedido += `>> ${order[i].quantity} x ${order[i].subType} - ${order[i].specification} -> R$ ${(order[i].quantity * order[i].promotionValue).toFixed(2).replace('.',",")}\n${adicional}\n${comb}`
             } else {
-                itensPedido += `>> ${order[i].quantity} x ${order[i].subType} - ${order[i].specification} -> R$ ${(order[i].quantity * order[i].value).toFixed(2).replace('.',',')}\n${adicional}\n`
+                itensPedido += `>> ${order[i].quantity} x ${order[i].subType} - ${order[i].specification} -> R$ ${(order[i].quantity * order[i].value).toFixed(2).replace('.',',')}\n${adicional}\n${comb}`
             }
         }
         return itensPedido
@@ -191,6 +204,20 @@ export default function Demand() {
             return ""
         } else {
             return `R$ ${adicional.toFixed(2).replace(".",",")}\n`
+        }
+    }
+
+    function Combo (obj) {
+        const combo = obj.combo
+        let comboText = "Esfihas do combo:\n"
+        for (item of combo) { 
+            comboText += `${item.quantity} x ${item.specification}\n`
+        }
+
+        if (comboText === "Esfihas do combo:\n" ) {
+            return ""
+        } else {
+            return comboText
         }
     }
 
@@ -369,9 +396,9 @@ export default function Demand() {
             </View>
             <ScrollView>
                 <Text style={styles.txtEstab}>Boston Esfiharia - TradiTTi App</Text>
-                <Text style={styles.divider}>-------------------------------------------------------</Text>
+                <Text style={styles.divider}>----------------------------------------</Text>
                 <Text style={styles.txtDate}>{`Data: ${diaEhora}`}</Text>
-                <Text style={styles.divider}>-------------------------------------------------------</Text>
+                <Text style={styles.divider}>----------------------------------------</Text>
                 <View style={styles.dropdownView}>
                     <Text style={styles.txtEstab}>Modo de Recebimento do pedido:</Text>
                     <SelectDropdown
@@ -397,7 +424,7 @@ export default function Demand() {
                                     <></>
                     }
                 </View>
-                <Text style={styles.divider}>-------------------------------------------------------</Text>
+                <Text style={styles.divider}>----------------------------------------</Text>
                 <Text style={styles.txtEstab}>Itens do Pedido:</Text>
                 <View style={styles.rowView}>
                     <Text style={styles.txt5}>id</Text>
@@ -416,7 +443,7 @@ export default function Demand() {
                                 return (
                                     <View style={styles.rowView} key={element.id+index}>
                                         <Text style={styles.txt5}>{`${index}: `}</Text>
-                                        <Text style={styles.txt45}>{`${element.subType} - ${element.specification}\n${Adicional02(element)}`}</Text>
+                                        <Text style={styles.txt45}>{`${element.subType} - ${element.specification}\n${Adicional02(element)}\n${Combo(element)}`}</Text>
                                         <Text style={styles.txt25}>{
                                             element.fixPromotionDay === agora.getDay()
                                             ?
@@ -437,8 +464,8 @@ export default function Demand() {
                                             <Icon 
                                                 name='trash-o'
                                                 color={'red'}
-                                                size={15}
-                                                padding={5}
+                                                size={demandWidth/29}
+                                                padding={demandWidth/90}
                                                 onPress={() => ExcludeItem(element)}
                                             />
                                         </TouchableOpacity>
@@ -481,7 +508,7 @@ export default function Demand() {
                         </>
                     }
                 </View>
-                <Text style={styles.divider}>-------------------------------------------------------</Text>
+                <Text style={styles.divider}>----------------------------------------</Text>
                 <View style={styles.dropdownView}>
                 <Text style={styles.txtEstab}>Modo de Pagamento:</Text>
                     <SelectDropdown
@@ -511,7 +538,7 @@ export default function Demand() {
                             <Text style={styles.txtGap}> Beneficiário: PPMG INTERNATIONAL</Text>
                         </>
                     }
-                    <Text style={styles.divider}>-------------------------------------------------------</Text>
+                    <Text style={styles.divider}>----------------------------------------</Text>
                 </View>
                 <View style={styles.rowView}>
                     <Text style={styles.txtCorpo}>Cliente:</Text>
@@ -600,173 +627,175 @@ const styles = StyleSheet.create({
     container: {
         flex:1,
         backgroundColor: '#C0C0C0',
-        width: '100%',
-        padding: 10,
+        width: demandWidth,
+        padding: demandWidth/45,
     },
     upView: {
         flexDirection: 'row',
         alignItems: 'center'
     },
     txtMsg: {
-        padding: 10,
-        fontSize: 20,
+        padding: demandWidth/45,
+        fontSize: demandWidth/22,
         color: D_TEXT_COLOR,
         fontWeight: 'bold',
         flexWrap: 'wrap',
     },
     divider: {
-        fontSize: 20,
+        fontSize: demandWidth/22,
         color: D_TEXT_COLOR,
         flexWrap: 'wrap',
         alignSelf: 'center'
     },
     txtEstab: {
-        padding:5,
-        fontSize: 18,
+        padding:demandWidth/90,
+        fontSize: demandWidth/24,
         color: D_TEXT_COLOR,
         fontWeight: 'bold',
         flexWrap: 'wrap',
         alignSelf: 'center'
     },
     txtDate: {
-        padding:5,
+        padding:demandWidth/90,
         color: D_TEXT_COLOR,
         flexWrap: 'wrap',
         alignSelf: 'center'
     },
     txtCorpo: {
         alignSelf: 'flex-start',
-        marginLeft: 5,
+        marginLeft: demandWidth/90,
         color: D_TEXT_COLOR,
         flexWrap: 'wrap',
-        width: '25%',
+        width: demandWidth*0.25,
     },
     txtCorpo2: {
         alignSelf:'flex-end',
-        marginRight:5,
+        marginRight:demandWidth/90,
         color: D_TEXT_COLOR,
         flexWrap: 'wrap',
-        width: '75%',
+        width: demandWidth*0.75,
     },
     rowView: {
         flexDirection: 'row',
-        padding:5,
+        padding:demandWidth/90,
         justifyContent: 'space-between'
     },
     sendView : {
         flexDirection: 'row',
-        padding:5,
+        padding:demandWidth/90,
         justifyContent: 'center',
         alignItems: 'center'
     },
     txtNewAdress: {
         backgroundColor: C_COLOR2,
-        borderRadius: 10,
-        padding: 10,
-        width: '75%',
-        height: 120,
+        borderRadius: demandWidth/45,
+        padding: demandWidth/45,
+        width: demandWidth*0.70,
+        height: demandHeight/8,
     },
     txtTroco: {
         backgroundColor: C_COLOR2,
-        borderRadius: 10,
-        padding: 5,
-        width: '65%',
-        height: 30,
+        borderRadius: demandWidth/45,
+        padding: demandWidth/90,
+        width: demandWidth*0.65,
+        height: demandHeight/25,
         alignContent: 'flex-start'
     },
     btnAdress: {
         backgroundColor: C_COLOR1,
-        borderRadius: 10,
-        padding: 5,
+        borderRadius: demandWidth/45,
+        padding: demandWidth/90,
         alignItems: 'center',
-        width: '68%',
+        width: demandWidth*0.68,
         justifyContent: 'flex-end',
-        marginLeft: 100
+        marginLeft: demandWidth/4
     },
     
     btnSend: {
         backgroundColor: 'green',
-        borderRadius: 10,
-        padding: 5,
+        borderRadius: demandWidth/45,
+        padding: demandWidth/90,
         alignItems: 'center',
-        width: '90%',
+        width: demandWidth*0.85,
         justifyContent: 'center'
     },
     txtBtnAdress: {
         color: C_TEXT_COLOR,
-        fontSize: 20,
+        fontSize: demandWidth/22,
         fontWeight: 'bold'
     },
     dropdownView: {
-        width:'100%',
+        width:demandWidth*0.9,
         justifyContent:'center',
         alingItems:'center',
+        alignSelf: 'center'
     },
     dropdownButton: {
-        width:'95%',
-        borderRadius: 10,
-        height: 30,
+        width:demandWidth*0.8,
+        borderRadius: demandWidth/45,
+        height: demandHeight/25,
         backgroundColor: C_COLOR2,
+        alignSelf: 'center'
     },
     dropdown: {
-        borderRadius: 10,
-        width: '80%',
-        marginLeft: 25,
+        borderRadius: demandWidth/45,
+        width: demandWidth*0.82,
+        marginLeft: demandWidth/100,
         justifyContent: 'center'
     },
     txt25: {
         alignSelf: 'flex-start',
         color: D_TEXT_COLOR,
         flexWrap: 'wrap',
-        width: '25%',
-        fontSize:13
+        width: demandWidth*0.225,
+        fontSize:demandWidth/32
     },
     txt45: {
         alignSelf: 'flex-start',
         color: D_TEXT_COLOR,
         flexWrap: 'wrap',
-        width: '45%',
-        fontSize:13
+        width: demandWidth*0.405,
+        fontSize:demandWidth/32
     },
     txt20: {
         alignSelf: 'flex-start',
         color: D_TEXT_COLOR,
         flexWrap: 'wrap',
-        width: '20%',
-        fontSize:13
+        width: demandWidth*0.18,
+        fontSize:demandWidth/32
     },
     txt5: {
         alignSelf: 'flex-start',
         color: D_TEXT_COLOR,
-        width: '5%',
-        fontSize:13
+        width: demandWidth*0.045,
+        fontSize:demandWidth/32
     },
     txtTotal80: {
         alignSelf: 'flex-end',
         color: D_TEXT_COLOR,
-        width: '80%',
-        fontSize: 20,
+        width: demandWidth*0.72,
+        fontSize: demandWidth/22,
         fontWeight: 'bold'
     },
     txtEntrega80: {
         alignSelf: 'flex-end',
         color: D_TEXT_COLOR,
-        width: '80%',
+        width: demandWidth*0.72,
         fontWeight: 'bold'
     },
     txtTotal20: {
         alignSelf: 'flex-end',
         color: D_TEXT_COLOR,
-        width: '20%',
+        width: demandWidth*0.18,
         fontWeight: 'bold'
     },
     txtEntrega20: {
         alignSelf: 'flex-end',
         color: D_TEXT_COLOR,
-        width: '20%',
+        width: demandWidth*0.18,
     },
     txtGap: {
-        padding:5,
+        padding:demandWidth/90,
         color: "dodgerblue",
         flexWrap: 'wrap',
         alignSelf: 'center',

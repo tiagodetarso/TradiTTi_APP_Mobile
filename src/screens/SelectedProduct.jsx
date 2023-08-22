@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, TouchableHighlight, TextInput, Image, Alert } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, TouchableHighlight, TextInput, Image, Alert, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux'
 import { addItem } from '../slices/demandSlice'
 import { Button, Dialog, Portal} from 'react-native-paper'
 import ModalSelect from '../components/ModalSelect'
+import ModalCombo from '../components/ModalCombo'
 
 import { M_COLOR, C_COLOR1, C_COLOR2, D_COLOR1, D_COLOR2, C_TEXT_COLOR, D_TEXT_COLOR, URL_API } from '../../global';
+
+selectedWidth = Dimensions.get('screen').width
+selectedHeight = Dimensions.get('screen').height
 
 export default function SelectedProduct ({navigation, route }) {
 
     const product = route.params.paramKey
-
     const agora = new Date()
 
     const dispatch = useDispatch()
@@ -22,6 +25,7 @@ export default function SelectedProduct ({navigation, route }) {
     const [ subtotal, setSubtotal ] = useState(0)
     const [ visible, setVisible ] = useState(false)
     const [ extras, setExtras ] = useState([])
+    const [ combos, setCombos ] = useState([])
 
     function HideDialog() {
         setVisible(false)
@@ -73,8 +77,11 @@ export default function SelectedProduct ({navigation, route }) {
     },[quantity])
 
     function AddToCart() {
+        console.log(combos)
         if (quantity == 0) {
             Alert.alert('Você não preencheu a quantidade')
+        } else if((combos === Array([])) && (product.specification === "misto" || 'diverso 10' || 'diverso 20' || 'especial 10' || 'especial 20')) {
+            Alert.alert('Você não escolheu as esfihas dos seu combo!')
         } else {
             setVisible(true)
             dispatch(addItem({
@@ -86,15 +93,32 @@ export default function SelectedProduct ({navigation, route }) {
                 fixPromotionDay: product.fixPromotionDay,
                 promotionValue: product.promotionValue,
                 quantity: quantity,
-                extra: extras
+                extra: extras,
+                combo: combos
             }))
         }
-        console.log(demandItens)
     }
 
     function ModalToSelected (array) {
         setExtras(array)
-        setVisible(false)
+        Alert.alert("Agora, aperte o botão 'Adicionar ao Pedido'!")
+    }
+
+    function ModalComboToSelected (array) {
+        setCombos(array)
+        Alert.alert("Agora, aperte o botão 'Adicionar ao Pedido'!")
+    }
+
+    function ComboMessage() {
+        let message = "Esfihas do combo:\n"
+        for (const combo of combos) {
+            message += `${combo.quantity} x ${combo.specification}\n`
+        }
+
+        if (message === "Esfihas do combo:\n" ) {
+            message = ""
+        }
+        return message
     }
 
     function AdditionalMessage() {
@@ -109,7 +133,7 @@ export default function SelectedProduct ({navigation, route }) {
             message += `${subMessage}`
         }
         if (message === "Adicionais:\n") {
-            message += "Não foram acrescentados adicionais"
+            message = ""
         }
         return message
     }
@@ -148,8 +172,8 @@ export default function SelectedProduct ({navigation, route }) {
                     <Icon 
                         name='minus'
                         color={'red'}
-                        size={30}
-                        padding={5}
+                        size={selectedWidth/15}
+                        padding={selectedWidth/90}
                         onPress={Minus}
                     />
                 </TouchableOpacity>
@@ -167,8 +191,8 @@ export default function SelectedProduct ({navigation, route }) {
                     <Icon 
                         name='plus'
                         color={'green'}
-                        size={30}
-                        padding={5}
+                        size={selectedWidth/15}
+                        padding={selectedWidth/90}
                         onPress={Plus}
                     />
                 </TouchableOpacity>
@@ -186,14 +210,18 @@ export default function SelectedProduct ({navigation, route }) {
                         ?
                         <ModalSelect produto={'adicional pd'} qtt={quantity} modalToSelected={ModalToSelected} txt="Deseja acrescentar adicionais?" />
                         :
-                        <></>
+                            product.subType === 'esfiha combos' && product.specification !== ['carne 10', 'carne 20', 'frango10', 'frango20']
+                            ?
+                            <ModalCombo combo={product.specification} qtt={quantity} txt="Escolher as esfihas do combo" modalComboToSelected={ModalComboToSelected} />
+                            :
+                            <></>
             }
             <View>
                 <Portal>
                     <Dialog visible={visible} onDismiss={HideDialog}>
                         <Dialog.Title>Sucesso!</Dialog.Title>
                         <Dialog.Content>
-                            <Text>{`Adicionado ao pedido:\n ${quantity} x ${product.subType}(s) - ${product.specification}\n\n${AdditionalMessage()}`}</Text>
+                            <Text>{`Adicionado ao pedido:\n ${quantity} x ${product.subType}(s) - ${product.specification}\n${AdditionalMessage()}\n${ComboMessage()}`}</Text>
                         </Dialog.Content>
                         <Dialog.Actions>
                             <Button onPress={() => navigation.navigate("Escolher")}>Continuar Escolhendo</Button>
@@ -202,10 +230,7 @@ export default function SelectedProduct ({navigation, route }) {
                     </Dialog>
                 </Portal>
             </View>
-            <View style={styles.vwSbt}>
-                <Text style={styles.txtMsg}>{`Subtotal para este item:`}</Text>
-                <Text style={styles.txtMsg}>{`R$ ${subtotal.toFixed(2).replace('.',',')}`}</Text>
-            </View>
+           
             <View style={styles.vwBtn}>
                 <TouchableHighlight
                     style={styles.btnAdd}
@@ -230,19 +255,19 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        width: '100%',
-        padding: 10,
+        width: selectedWidth,
+        padding: selectedWidth/45,
     },
     txtMsg: {
-        padding: 5,
-        fontSize: 20,
+        padding: selectedWidth/90,
+        fontSize: selectedWidth/20,
         color: D_TEXT_COLOR,
         fontWeight: 'bold',
         flexWrap: 'wrap',
     },
     txtSubMsg: {
-        padding: 5,
-        fontSize: 15,
+        padding: selectedWidth/90,
+        fontSize: selectedWidth/30,
         color: D_TEXT_COLOR,
         flexWrap: 'wrap',
     },
@@ -250,77 +275,78 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
-        padding: 10,
+        width: selectedWidth,
+        padding: selectedWidth/45,
     },
     btnQtt: {
         alignItems: 'center',
-        padding: 10,
-        borderRadius: 20,
+        padding: selectedWidth/45,
+        borderRadius: selectedWidth/20,
     },
     btnContinue: {
         alignItems: 'center',
-        padding: 30,
-        borderRadius: 20,
+        padding: selectedWidth/15,
+        borderRadius:selectedWidth/20,
     },
     txtInput: {
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 10,
-        width: 60,
-        fontSize: 25,
+        padding: selectedWidth/45,
+        width: selectedWidth/7.5,
+        fontSize: selectedWidth/17,
         fontWeight: 'bold',
         backgroundColor: '#EEE8AA',
-        borderRadius: 15,
+        borderRadius: selectedWidth/30,
     },
     vwImage: {
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
-        padding: 5,
+        width: selectedWidth,
+        padding: selectedWidth/90,
     },
     image: {
         resizeMode: 'contain',
-        width: 300,
-        height: 200,
+        width: selectedWidth/1.5,
+        height: selectedHeight/5,
         alignSelf: 'center',
         justifyContent: 'flex-start',
-        borderRadius: 20,
+        borderRadius: selectedWidth/20,
     },
     txtNoImage: {
-        width: 300,
-        height: 200,
+        width: selectedWidth/1.5,
+        height: selectedHeight/5,
         textAlignVertical: 'center',
         textAlign: 'center',
     },
     btnAdd: {
         backgroundColor: '#2E8B57',
-        borderRadius: 10,
-        padding: 10,
-        width: 250,
+        borderRadius: selectedWidth/45,
+        padding: selectedWidth/45,
+        width: selectedWidth/1.8,
         alignItems: 'center',
     },
     txtBtn: {
         color: C_TEXT_COLOR,
-        fontSize: 20,
+        fontSize: selectedWidth/20,
         fontWeight: 'bold'
     },
     txtBtnCont: {
         color: M_COLOR,
-        fontSize: 20,
+        fontSize: selectedWidth/20,
         fontWeight: 'bold',
-        width: '100%'
+        width: selectedWidth,
+        textAlign: 'center'
     },
     vwBtn: {
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
-        padding: 10
+        width: selectedWidth,
+        padding: selectedWidth/45,
     },
     vwSbt: {
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
-        padding: 5
+        width: selectedWidth,
+        padding: selectedWidth/90
     },
 })

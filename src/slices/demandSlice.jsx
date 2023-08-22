@@ -12,7 +12,8 @@ export const demandSlice = createSlice({
             fixPromotionDay: 7,
             promotionValue: 0,
             quantity:0,
-            extra:[]
+            extra:[],
+            combo:[]
         }],
     },
     reducers: {

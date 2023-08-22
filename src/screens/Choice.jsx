@@ -1,10 +1,13 @@
 import React, { useEffect, useState, memo } from 'react';
-import { SafeAreaView, View, TextInput, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, TextInput, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { C_COLOR1, M_COLOR, C_TEXT_COLOR, D_TEXT_COLOR, URL_API, CLIENT_NUMBER} from '../../global';
 
 import Header from '../components/Header';
+
+const choiceWidth = Dimensions.get('screen').width
+const choiceHeight = Dimensions.get('screen').height
 
 const Choice = memo(() => {
 
@@ -171,66 +174,63 @@ const Choice = memo(() => {
 
 export default Choice;
 
-
-    
 const styles = StyleSheet.create({
     container: {
         flex:1,
         backgroundColor: M_COLOR,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        width: '100%',
-        padding: 10,
+        width: choiceWidth,
+        padding: choiceWidth/45,
     },
     upView: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
+        width: choiceWidth,
     },
     corpo: {
-        padding: 10,
+        padding: choiceWidth/45,
     },
     outro: {
         alignSelf: 'center',
-        width: '100%',
-        maxHeigth: 100,
+        width: choiceWidth,
+        maxHeigth: choiceHeight/8,
     },
     txtMsg: {
-        padding: 10,
-        fontSize: 20,
+        padding: choiceWidth/45,
+        fontSize: choiceWidth/20,
         color: D_TEXT_COLOR,
         fontWeight: 'bold',
         flexWrap: 'wrap',
     },
     txtItem: {
-        padding: 5,
-        fontSize: 13,
+        padding: choiceWidth/80,
+        fontSize: choiceWidth/26.5,
         color: D_TEXT_COLOR,
     },
     vwSub: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        maxWidth: '100%',
-        padding: 5
+        maxWidth: choiceWidth,
+        padding: choiceWidth/90,
     },
     txtbx: {
         backgroundColor: 'white',
-        borderRadius: 5,
-        padding: 5,
-        width: 30,
+        borderRadius: choiceWidth/90,
+        padding: choiceWidth/90,
     },
     searchArea: {
-        margin:10,
+        margin:choiceWidth/45,
         backgroundColor: '#ffffff',
-        width: "80%",
-        height: 40,
-        borderRadius: 10,
+        width: choiceWidth*0.8,
+        height: choiceHeight/20,
+        borderRadius: choiceWidth/45,
         justifyContent: 'center',
     },
     input: {
-        fontSize: 17,
-        padding: 10,
+        fontSize: choiceWidth/23,
+        padding: choiceWidth/45,
     }
 })

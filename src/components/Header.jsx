@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import { Avatar, MD3LightTheme } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 
 import { C_COLOR2, D_TEXT_COLOR } from '../../global';
+
+const headerWidth = Dimensions.get('screen').width
 
 export default function Header() {
 
@@ -23,7 +25,7 @@ export default function Header() {
         <View style={styles.avatar}>
             <Avatar.Text
                 style={styles.avatarText}
-                size={40}
+                size={headerWidth/10}
                 color={C_COLOR2}
                 label={avatarLabel}
                 labelStyle='bold'
@@ -37,17 +39,17 @@ export default function Header() {
 const styles = StyleSheet.create({
     avatar: {
         flexDirection:'row',
-        padding:10,
+        padding:headerWidth/45,
     },
     avatarText: {
         justifyContent:'flex-start',
     },
     txtNome: {
         justifyContent:'flex-start',
-        padding:10,
+        padding:headerWidth/45,
         fontStyle:'italic',
         fontWeight:'bold',
-        fontSize: 15,
+        fontSize:headerWidth/30,
         color: D_TEXT_COLOR,
     },
 })

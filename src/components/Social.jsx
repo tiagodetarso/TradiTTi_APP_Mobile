@@ -1,10 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Linking } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Linking, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { C_COLOR2, C_TEXT_COLOR, D_COLOR1, D_COLOR2, M_COLOR } from '../../global';
+import { C_TEXT_COLOR } from '../../global';
 
-export default function Social() {
+const socialWidth = Dimensions.get('screen').width
+
+export default function Social({color, corTexto}) {
 
     const url_facebook = 'https://www.facebook.com/Bostonesfihariaastorga/'
     const url_instagram = 'https://www.instagram.com/bostonesfihariaastorga/'
@@ -45,11 +47,11 @@ export default function Social() {
             >
                 <Icon 
                     name='facebook'
-                    color={C_COLOR2}
-                    size={50}
+                    color={color}
+                    size={socialWidth/10}
 
                 />
-                <Text style={styles.txtBotao}>Facebook</Text>
+                <Text style={{color:corTexto, fontSize:socialWidth/40, fontWeight:'bold'}}>Facebook</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.botao}
@@ -57,10 +59,10 @@ export default function Social() {
             >
                 <Icon 
                     name='instagram' 
-                    color={C_COLOR2}
-                    size={50}
+                    color={color}
+                    size={socialWidth/10}
                 />
-                <Text style={styles.txtBotao}>Instagram</Text>
+                <Text style={{color:corTexto, fontSize:socialWidth/40, fontWeight:'bold'}}>Instagram</Text>
             </TouchableOpacity>
             
             <TouchableOpacity
@@ -69,10 +71,10 @@ export default function Social() {
             >
                 <Icon 
                     name='whatsapp' 
-                    color={C_COLOR2}
-                    size={50}
+                    color={color}
+                    size={socialWidth/10}
                 />
-                <Text style={styles.txtBotao}>(44) 9 9700-6598</Text>
+                <Text style={{color:corTexto, fontSize:socialWidth/40, fontWeight:'bold'}}>(44) 9 9700-6598</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.botao}
@@ -80,31 +82,25 @@ export default function Social() {
             >
                 <Icon 
                     name='map' 
-                    color={C_COLOR2}
-                    size={50}
+                    color={color}
+                    size={socialWidth/10}
                 />
-                <Text style={styles.txtBotao}>Localização</Text>
+                <Text style={{color:corTexto, fontSize:socialWidth/40, fontWeight:'bold'}}>Localização</Text>
             </TouchableOpacity>
         </View>
     )
-
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
-        padding:10,
+        padding:socialWidth/45,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'space-evenly'
     },
     botao: {
-        paddingRight: 30,
+        paddingHorizontal: socialWidth/50,
         alignItems: 'center'
-    },
-    txtBotao: {
-        color: C_TEXT_COLOR,
-        fontSize: 10,
-        fontWeight: 'bold'
     }
 })

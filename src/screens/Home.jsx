@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, ScrollView, Image, Text, StyleSheet, Dimensions } from 'react-native';
 
-import { C_COLOR1, D_TEXT_COLOR, URL_API, CLIENT_NUMBER } from '../../global';
+import { C_COLOR1, D_COLOR2, D_TEXT_COLOR, URL_API, CLIENT_NUMBER } from '../../global';
 
 import fechados from '../../assets/fechadoBoston.jpg'
 
 import Header from '../components/Header';
-import Social2 from '../components/Social2';
+import Social from '../components/Social';
 
-const imageWidth = Dimensions.get('screen').width
+const homeWidth = Dimensions.get('screen').width
+const homeHeight = Dimensions.get('screen').height
 
 export default function Home() {
 
@@ -144,7 +145,7 @@ export default function Home() {
                     }
                 </View>
                 <Text style={styles.txtCorpo}>Contate-nos</Text>
-                <Social2 />
+                <Social color={D_COLOR2} txtColor={D_TEXT_COLOR}/>
             </ScrollView>
         </SafeAreaView>
     )
@@ -156,49 +157,49 @@ const styles = StyleSheet.create({
         backgroundColor: C_COLOR1,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        width: '100%',
-        padding: 10,
+        width: homeWidth,
+        padding: homeWidth/45,
     },
     upView: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
+        width: homeWidth,
     },
     corpo: {
-        width: '100%',
-        padding: 5,
+        width: homeWidth,
+        padding: homeWidth/90,
       },
     image: {
         resizeMode: 'contain',
-        width: imageWidth*0.9,
-        height: 250,
+        width: homeWidth*0.9,
+        height: homeHeight/3.75,
         alignSelf: 'center',
-        borderRadius: 50,
+        borderRadius: homeWidth/10,
     },
     txtMsg: {
-        padding: 10,
-        fontSize: 20,
+        padding: homeWidth/45,
+        fontSize: homeWidth/20,
         color: D_TEXT_COLOR,
         fontWeight: 'bold',
     },
     txtCorpo: {
-        padding: 5,
-        fontSize: 20,
+        padding: homeWidth/90,
+        fontSize: homeWidth/20,
         color: D_TEXT_COLOR,
         fontWeight: 'bold',
         alignSelf: 'center',
     },
     txtSub: {
-        padding: 5,
-        fontSize: 15,
+        padding: homeWidth/90,
+        fontSize: homeWidth/25,
         color: D_TEXT_COLOR,
         fontWeight: 'bold',
         alignSelf: 'center',
     },
     spam: {
-        padding: 5,
-        fontSize: 15,
+        padding: homeWidth/90,
+        fontSize: homeWidth/25,
         color: D_TEXT_COLOR,
         alignSelf: 'center',
     },
@@ -206,27 +207,27 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'stretch',
         justifyContent: 'center',
-        width: '100%',
+        width: homeWidth,
         flexWrap: 'wrap'
     },
     txtInstruction: {
-        fontSize: 16,
+        fontSize: homeWidth/24,
         textAlign: 'justify',
     },
     instruction: {
         alignItems: 'center',
-        margin: 10,
-        padding:10
+        margin: homeWidth/45,
+        padding:homeWidth/45
     },
     txtAberta: {
         color: 'green',
-        fontSize: 18,
+        fontSize: homeWidth/22,
         fontWeight: 'bold',
         textAlign: 'justify',
     },
     txtFechada: {
         color: 'red',
-        fontSize: 18,
+        fontSize: homeWidth/22,
         fontWeight: 'bold',
         textAlign: 'justify',
     }

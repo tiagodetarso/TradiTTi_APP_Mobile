@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, TextInput, Switch, Text, TouchableHighlight, Alert } from 'react-native'
+import { View, StyleSheet, TextInput, Switch, Text, TouchableHighlight, Alert, Dimensions } from 'react-native'
 import { Modal, Portal, Button, Dialog } from 'react-native-paper'
 
-import { M_COLOR, C_COLOR1, C_COLOR2, D_COLOR1, C_TEXT_COLOR, CLIENT_NUMBER, URL_API } from '../../global';
+import { M_COLOR, C_COLOR1, D_COLOR1, C_TEXT_COLOR, CLIENT_NUMBER, URL_API } from '../../global';
+
+const modalWidth = Dimensions.get('screen').width
+const modalHeight = Dimensions.get('screen').height
 
 export default function ModalSelect({produto, qtt, modalToSelected, txt}) {
 
@@ -15,7 +18,7 @@ export default function ModalSelect({produto, qtt, modalToSelected, txt}) {
   const showModal = () => {
     qtt === '0'
     ?
-    Alert.alert("Coloque a quantidade de esfihas, antes de escolher os adicionais")
+    Alert.alert("Coloque a quantidade de esfihas, antes de escolher")
     :
     setVisible(true)
   } 
@@ -48,11 +51,24 @@ export default function ModalSelect({produto, qtt, modalToSelected, txt}) {
   }
 
   const handleProductSelection = (productID) => {
-    setExtraList((extraList) => 
+    let selecionados = 0
+    extraList.map((product) =>
+      product.selected ? selecionados +=1 : selecionados
+    )
+
+    if (selecionados === 0 || selecionados === 1) {
+      setExtraList((extraList) =>
       extraList.map((product) =>
         product._id === productID ? { ...product, selected: !product.selected } : product
       )
     )
+    } else if (selecionados ===2) {
+      setExtraList((extraList) =>
+      extraList.map((product) =>
+        product._id === productID ? { ...product, selected: false } : product
+      )
+    )
+    }
   }
 
   function Add(array) {
@@ -148,12 +164,12 @@ export default function ModalSelect({produto, qtt, modalToSelected, txt}) {
                 <Text style = {styles.txtBtn}>Adicionar</Text>
             </TouchableHighlight>
           </View>
-          <Button style={{marginTop: 10}} textColor={D_COLOR1} onPress={hideModal}>
+          <Button style={{marginTop: modalWidth/45}} textColor={D_COLOR1} onPress={hideModal}>
             fechar
           </Button>
         </Modal>
       </Portal>
-      <Button style={{marginTop: 10}} onPress={showModal}>
+      <Button style={{marginBottom:modalWidth/15, marginTop:modalWidth/45}} labelStyle={{fontSize:modalWidth/20, color:M_COLOR}} onPress={showModal}>
         {txt}
       </Button>
     </>
@@ -162,62 +178,59 @@ export default function ModalSelect({produto, qtt, modalToSelected, txt}) {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    height: '70%',
+    height: modalHeight*0.7,
     backgroundColor: C_COLOR1,
-    paddin:20,
-    marginTop: 120,
-    marginHorizontal: 20,
+    padding: modalWidth/30,
+    marginTop: modalHeight/8.5,
+    marginHorizontal: modalWidth/20,
     justifyContent: 'flex-start',
-    borderRadius:20
+    borderRadius:modalWidth/20
   },
   modalView:{
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems:'center',
-    marginLeft: 20,
-    marginRight: 20
+    marginHorizontal: modalWidth/20,
   },
   modalSwitch: {
     borderWidth: 1,
     backgroundColor: C_COLOR1
   },
   title: {
-    fontSize: 20,
+    fontSize: modalWidth/20,
     fontWeight: 'bold',
-    marginRight: 10,
-    marginVertical: 10,
+    marginRight: modalWidth/45,
+    marginVertical: modalWidth/45,
     alignSelf: 'center'
   },
   subTitle: {
-    fontSize: 16,
+    fontSize: modalWidth/28,
     fontWeight: 'bold',
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 10,
-    marginTop: 10,
+    marginHorizontal: modalWidth/45,
+    marginVertical: modalHeight/100,
     alignSelf: 'center'
   },
   btnAdd: {
     backgroundColor: '#2E8B57',
-    borderRadius: 10,
-    padding: 5,
-    width: 200,
-    height: 40,
+    borderRadius: modalWidth/45,
+    padding: modalWidth/90,
+    width: modalWidth/2,
+    height: modalHeight/22,
     alignItems: 'center',
 },
 vwBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
-    padding: 10,
-    marginTop: 15,
+    width: modalWidth*0.85,
+    padding: modalWidth/45,
+    marginTop: modalHeight/50,
 },
 txtBtn: {
     color: C_TEXT_COLOR,
-    fontSize: 20,
+    fontSize: modalWidth/20,
     fontWeight: 'bold'
 },
 txtDialog: {
-  fontSize: 15
+  fontSize: modalWidth/30
 }
 })

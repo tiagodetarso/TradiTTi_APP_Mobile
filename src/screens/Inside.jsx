@@ -1,4 +1,5 @@
 import React from 'react';
+import { Dimensions } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Entypo';
 
@@ -8,6 +9,8 @@ import Demand from './Demand'
 import Status from './Status'
 
 const Tab = createBottomTabNavigator()
+
+const insideWidth = Dimensions.get('screen').width
 
 export default function Inside() {
 
@@ -20,7 +23,7 @@ export default function Inside() {
                     component={Home}
                     options={{
                         tabBarIcon: ({color, size}) => (
-                            <Icon name='home' size={35} />
+                            <Icon name='home' size={insideWidth/12} />
                         ),
                     }} 
                 />
@@ -29,7 +32,7 @@ export default function Inside() {
                     component={Choice}
                     options={{
                         tabBarIcon: ({color, size}) => (
-                            <Icon name='list' size={35} />
+                            <Icon name='list' size={insideWidth/12} />
                         ),
                     }} 
                 />
@@ -38,7 +41,7 @@ export default function Inside() {
                     component={Demand}
                     options={{
                         tabBarIcon: ({color, size}) => (
-                            <Icon name='shop' size={35} />
+                            <Icon name='shop' size={insideWidth/12} />
                         ),
                     }} 
                 />
@@ -47,7 +50,7 @@ export default function Inside() {
                     component={Status}
                     options={{
                         tabBarIcon: ({color, size}) => (
-                            <Icon name='keyboard' size={35} />
+                            <Icon name='keyboard' size={insideWidth/12} />
                         ),
                     }} 
                 />

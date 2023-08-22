@@ -1,9 +1,12 @@
 import React from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet, Linking } from 'react-native'
+import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet, Linking, Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import email from 'react-native-email'
 
-import { M_COLOR, C_COLOR1, C_COLOR2, D_COLOR1, D_COLOR2, C_TEXT_COLOR, D_TEXT_COLOR } from '../../global';
+import { M_COLOR, C_COLOR1, C_COLOR2, D_COLOR1, D_COLOR2, C_TEXT_COLOR } from '../../global';
+
+const statusWidth = Dimensions.get('screen').width
+const statusHeight = Dimensions.get('screen').height
 
 export default function Status() {
 
@@ -51,8 +54,6 @@ export default function Status() {
             <View style={styles.onlyView}>
                 <Text style={styles.txtTitle}>DESENVOLVIDO POR:</Text>
                 <Text style={styles.txtNome}>Tiago de Tarso Raggiotto Gonçalves</Text>
-                <Text style={styles.txtQuali}>Técnico em Desenvolvimento de Sistemas</Text>
-                <Text style={styles.txtQuali}>Engenheiro Mecânico</Text>
                 <View style={styles.contact}>
                     <TouchableOpacity 
                         onPress={handleGithubPress}
@@ -61,7 +62,7 @@ export default function Status() {
                         <Icon 
                             name='github'
                             color={C_COLOR1}
-                            size={50}
+                            size={statusWidth/8}
 
                         />
                         <Text style={styles.txtContact}>github</Text>
@@ -73,7 +74,7 @@ export default function Status() {
                         <Icon 
                             name='linkedin'
                             color={C_COLOR1}
-                            size={50}
+                            size={statusWidth/8}
 
                         />
                         <Text style={styles.txtContact}>linkedin</Text>
@@ -85,7 +86,7 @@ export default function Status() {
                         <Icon 
                             name='whatsapp'
                             color={C_COLOR1}
-                            size={50}
+                            size={statusWidth/8}
 
                         />
                         <Text style={styles.txtContact}>whatsapp</Text>
@@ -97,7 +98,7 @@ export default function Status() {
                         <Icon 
                             name='envelope'
                             color={C_COLOR1}
-                            size={50}
+                            size={statusWidth/8}
 
                         />
                         <Text style={styles.txtContact}>e-mail</Text>
@@ -114,37 +115,37 @@ const styles = StyleSheet.create({
         backgroundColor: D_COLOR2,
         alignItems: 'flex-start',
         justifyContent: 'center',
-        width: '100%',
-        padding: 10,
+        width: statusWidth,
+        padding: statusWidth/45,
         textAlign: 'left'
     },
     onlyView: {
-        marginLeft: 40,
+        marginLeft: statusWidth/12,
     },
     txtTitle: {
         color: C_TEXT_COLOR,
-        fontSize: 30,
+        fontSize: statusWidth/15,
         fontWeight: 'bold',
-        paddin:5,
+        padding:statusWidth/90,
     },
     txtNome: {
         color: M_COLOR,
-        fontSize: 18,
-        padding:5,
+        fontSize: statusWidth/25,
+        padding:statusWidth/90,
     },
     txtQuali: {
-        fontSize:15,
+        fontSize:statusWidth/30,
         color: C_COLOR2,
-        paddingLeft:5,
+        paddingLeft:statusWidth/90,
     },
     contact: {
         flexDirection: 'row',
-        marginTop:10,
-        padding:5,
+        marginTop:statusWidth/45,
+        padding:statusWidth/90,
         justifyContent: 'space-between'
     },
     txtContact: {
-        fontSize:15,
+        fontSize:statusWidth/30,
         color: C_COLOR1,
         textAlign: 'center'
     },
